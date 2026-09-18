@@ -1,0 +1,1301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>LoginShield — Authentication Threat Intelligence</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+
+<!-- =====================================================
+     AUTHENTICATION APPLICATION
+===================================================== -->
+
+<div id="authScreen" class="auth-screen">
+
+    <div class="auth-background">
+        <div class="auth-glow glow-one"></div>
+        <div class="auth-glow glow-two"></div>
+        <div class="auth-grid"></div>
+    </div>
+
+    <div class="auth-container">
+
+        <div class="auth-brand">
+
+            <div class="auth-logo">
+                L
+            </div>
+
+            <div>
+                <div class="auth-brand-name">
+                    LoginShield
+                </div>
+
+                <div class="auth-brand-subtitle">
+                    Authentication Security
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- LOGIN CARD -->
+
+        <div class="auth-card">
+
+            <div class="security-badge">
+                <span></span>
+                SECURE AUTHENTICATION
+            </div>
+
+            <h1>
+                Protect your account
+            </h1>
+
+            <p class="auth-description">
+                Sign in securely with LoginShield.
+                Your authentication activity is continuously
+                analyzed for suspicious behavior.
+            </p>
+
+
+            <!-- STEP 1 -->
+
+            <div id="authStepOne">
+
+                <label>
+                    Phone Number
+                </label>
+
+                <div class="input-wrapper">
+
+                    <span class="input-prefix">
+                        +91
+                    </span>
+
+                    <input
+                        type="tel"
+                        id="authPhone"
+                        placeholder="Enter mobile number"
+                        maxlength="10"
+                        autocomplete="tel"
+                    >
+
+                </div>
+
+
+                <label class="email-label">
+                    Email Address
+                </label>
+
+                <div class="input-wrapper">
+
+                    <span class="input-icon">
+                        @
+                    </span>
+
+                    <input
+                        type="email"
+                        id="authEmail"
+                        placeholder="Enter email address"
+                        autocomplete="email"
+                    >
+
+                </div>
+
+
+                <button
+                    id="requestOtpButton"
+                    class="auth-primary-button"
+                    onclick="requestLoginOTP()"
+                >
+                    <span>Continue Securely</span>
+                    <span>→</span>
+                </button>
+
+
+                <div class="auth-trust">
+
+                    <span>✓</span>
+
+                    <span>
+                        Protected by LoginShield threat intelligence
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- STEP 2 -->
+
+            <div id="authStepTwo" class="hidden">
+
+                <button
+                    class="back-auth-button"
+                    onclick="showAuthStep(1)"
+                >
+                    ← Change details
+                </button>
+
+
+                <div class="otp-icon">
+                    #
+                </div>
+
+                <h2>
+                    Verify your identity
+                </h2>
+
+                <p class="otp-description">
+                    Enter the one-time password sent to
+                    <strong id="otpDestination">
+                        your registered contact
+                    </strong>.
+                </p>
+
+
+                <div class="otp-inputs">
+
+                    <input
+                        maxlength="1"
+                        inputmode="numeric"
+                        class="otp-input"
+                    >
+
+                    <input
+                        maxlength="1"
+                        inputmode="numeric"
+                        class="otp-input"
+                    >
+
+                    <input
+                        maxlength="1"
+                        inputmode="numeric"
+                        class="otp-input"
+                    >
+
+                    <input
+                        maxlength="1"
+                        inputmode="numeric"
+                        class="otp-input"
+                    >
+
+                    <input
+                        maxlength="1"
+                        inputmode="numeric"
+                        class="otp-input"
+                    >
+
+                    <input
+                        maxlength="1"
+                        inputmode="numeric"
+                        class="otp-input"
+                    >
+
+                </div>
+
+
+                <!-- DEMO OTP -->
+
+                <div
+                    id="demoOtpBox"
+                    class="demo-otp-box hidden"
+                >
+
+                    <span>
+                        DEMO OTP
+                    </span>
+
+                    <strong id="demoOtp">
+                        ------
+                    </strong>
+
+                </div>
+
+
+                <button
+                    class="auth-primary-button"
+                    onclick="verifyLoginOTP()"
+                >
+                    <span>Verify & Sign In</span>
+                    <span>→</span>
+                </button>
+
+
+                <button
+                    class="resend-button"
+                    onclick="requestLoginOTP()"
+                >
+                    Resend OTP
+                </button>
+
+            </div>
+
+
+            <!-- SECURITY MESSAGE -->
+
+            <div
+                id="authMessage"
+                class="auth-message hidden"
+            ></div>
+
+        </div>
+
+
+        <div class="auth-footer">
+
+            <span>
+                LoginShield Security Intelligence
+            </span>
+
+            <span>•</span>
+
+            <span>
+                Authentication protected
+            </span>
+
+        </div>
+
+    </div>
+
+</div>
+<!-- =========================================================
+     APP SHELL
+========================================================= -->
+
+<div id="app">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="brand">
+            <div class="brand-icon">L</div>
+
+            <div>
+                <div class="brand-name">LoginShield</div>
+                <div class="brand-subtitle">Security Intelligence</div>
+            </div>
+        </div>
+
+        <nav class="navigation">
+
+            <div class="nav-section-title">MONITORING</div>
+
+            <button class="nav-item active" data-page="dashboard">
+                <span class="nav-icon">◈</span>
+                <span>Dashboard</span>
+            </button>
+
+            <button class="nav-item" data-page="events">
+                <span class="nav-icon">⌁</span>
+                <span>Login Events</span>
+            </button>
+
+            <button class="nav-item" data-page="alerts">
+                <span class="nav-icon">⚠</span>
+                <span>Alert Center</span>
+                <span id="alertBadge" class="nav-badge">0</span>
+            </button>
+
+            <button class="nav-item" data-page="locations">
+                <span class="nav-icon">◎</span>
+                <span>Location Intelligence</span>
+            </button>
+
+            <div class="nav-section-title">SECURITY</div>
+
+            <button class="nav-item" data-page="profile">
+                <span class="nav-icon">◇</span>
+                <span>Security Profile</span>
+            </button>
+
+            <button class="nav-item" data-page="investigation">
+                <span class="nav-icon">⌕</span>
+                <span>Investigation</span>
+            </button>
+
+            <div class="nav-section-title">LAB</div>
+
+            <button class="nav-item" data-page="simulation">
+                <span class="nav-icon">⚡</span>
+                <span>Simulation Lab</span>
+            </button>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <div class="system-status">
+                <span class="status-dot"></span>
+
+                <div>
+                    <strong>Protection Active</strong>
+                    <small>Threat engine online</small>
+                </div>
+            </div>
+
+            <div class="sidebar-user">
+                <div class="avatar">A</div>
+
+                <div class="sidebar-user-info">
+                    <strong>Security Admin</strong>
+                    <small>LoginShield</small>
+                </div>
+
+                <button class="sidebar-menu">•••</button>
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- =====================================================
+         MAIN AREA
+    ====================================================== -->
+
+    <main class="main-content">
+
+        <!-- TOPBAR -->
+
+        <header class="topbar">
+
+            <div class="topbar-left">
+
+                <button id="mobileMenu" class="mobile-menu">
+                    ☰
+                </button>
+
+                <div>
+                    <div class="breadcrumb">
+                        Security Center
+                        <span>/</span>
+                        <strong id="pageTitle">Dashboard</strong>
+                    </div>
+
+                    <div class="topbar-description" id="pageDescription">
+                        Real-time authentication threat monitoring
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="topbar-right">
+
+                <div class="live-indicator">
+                    <span></span>
+                    LIVE
+                </div>
+
+                <button class="icon-button" id="refreshButton" title="Refresh">
+                    ↻
+                </button>
+
+                <button class="icon-button notification-button" title="Notifications">
+                    ♢
+                    <span class="notification-dot"></span>
+                </button>
+
+            </div>
+
+        </header>
+
+
+        <!-- =================================================
+             PAGE: DASHBOARD
+        ================================================== -->
+
+        <section class="page active" id="page-dashboard">
+
+            <div class="page-header">
+
+                <div>
+                    <h1>Security Dashboard</h1>
+
+                    <p>
+                        Monitor authentication activity, detect threats,
+                        and investigate suspicious login behavior.
+                    </p>
+                </div>
+
+                <div class="header-actions">
+
+                    <div class="last-updated">
+                        Last updated
+                        <strong id="lastUpdated">Just now</strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- KPI CARDS -->
+
+            <div class="stats-grid">
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+                        <span class="stat-label">
+                            TOTAL ATTEMPTS
+                        </span>
+
+                        <div class="stat-icon blue">↯</div>
+                    </div>
+
+                    <div class="stat-value" id="totalAttempts">
+                        —
+                    </div>
+
+                    <div class="stat-footer">
+                        <span class="neutral">Authentication activity</span>
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+                        <span class="stat-label">
+                            SUCCESSFUL
+                        </span>
+
+                        <div class="stat-icon green">✓</div>
+                    </div>
+
+                    <div class="stat-value" id="successfulLogins">
+                        —
+                    </div>
+
+                    <div class="stat-footer">
+                        <span class="positive" id="successRate">
+                            —
+                        </span>
+                        <span>success rate</span>
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+                        <span class="stat-label">
+                            FAILED
+                        </span>
+
+                        <div class="stat-icon orange">!</div>
+                    </div>
+
+                    <div class="stat-value" id="failedLogins">
+                        —
+                    </div>
+
+                    <div class="stat-footer">
+                        <span class="warning">Authentication failures</span>
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card danger-card">
+
+                    <div class="stat-top">
+                        <span class="stat-label">
+                            HIGH RISK
+                        </span>
+
+                        <div class="stat-icon red">⚠</div>
+                    </div>
+
+                    <div class="stat-value" id="highRiskEvents">
+                        —
+                    </div>
+
+                    <div class="stat-footer">
+                        <span class="danger">Requires attention</span>
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card critical-card">
+
+                    <div class="stat-top">
+                        <span class="stat-label">
+                            CRITICAL
+                        </span>
+
+                        <div class="stat-icon purple">✦</div>
+                    </div>
+
+                    <div class="stat-value" id="criticalEvents">
+                        —
+                    </div>
+
+                    <div class="stat-footer">
+                        <span class="danger">Immediate investigation</span>
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+                        <span class="stat-label">
+                            AVG RISK SCORE
+                        </span>
+
+                        <div class="stat-icon cyan">◉</div>
+                    </div>
+
+                    <div class="stat-value">
+                        <span id="averageRisk">—</span>
+                        <small>/100</small>
+                    </div>
+
+                    <div class="risk-meter">
+                        <div id="averageRiskBar"></div>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- MAIN DASHBOARD GRID -->
+
+            <div class="dashboard-grid">
+
+                <!-- RISK CHART -->
+
+                <div class="panel risk-panel">
+
+                    <div class="panel-header">
+
+                        <div>
+                            <h2>Risk Distribution</h2>
+                            <p>Authentication events by threat level</p>
+                        </div>
+
+                        <button class="panel-menu">
+                            •••
+                        </button>
+
+                    </div>
+
+                    <div class="risk-chart-container">
+                        <canvas id="riskChart"></canvas>
+                    </div>
+
+                </div>
+
+
+                <!-- SECURITY POSTURE -->
+
+                <div class="panel posture-panel">
+
+                    <div class="panel-header">
+
+                        <div>
+                            <h2>Security Posture</h2>
+                            <p>Current authentication environment</p>
+                        </div>
+
+                    </div>
+
+                    <div class="posture-score">
+
+                        <div class="score-ring">
+                            <div class="score-ring-inner">
+                                <strong id="securityScore">—</strong>
+                                <span>/100</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <strong id="securityStatus">
+                                Calculating...
+                            </strong>
+
+                            <p>
+                                Based on recent authentication activity
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="posture-list">
+
+                        <div class="posture-item">
+                            <span class="posture-label">
+                                Threat Detection
+                            </span>
+
+                            <span class="posture-value online">
+                                ACTIVE
+                            </span>
+                        </div>
+
+                        <div class="posture-item">
+                            <span class="posture-label">
+                                Behavioral Analysis
+                            </span>
+
+                            <span class="posture-value online">
+                                ACTIVE
+                            </span>
+                        </div>
+
+                        <div class="posture-item">
+                            <span class="posture-label">
+                                Geo Intelligence
+                            </span>
+
+                            <span class="posture-value online">
+                                ACTIVE
+                            </span>
+                        </div>
+
+                        <div class="posture-item">
+                            <span class="posture-label">
+                                Alert Monitoring
+                            </span>
+
+                            <span class="posture-value online">
+                                ACTIVE
+                            </span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- RECENT EVENTS -->
+
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <div>
+                        <h2>Recent Authentication Events</h2>
+                        <p>Latest login activity detected by LoginShield</p>
+                    </div>
+
+                    <button
+                        class="text-button"
+                        onclick="navigateTo('events')"
+                    >
+                        View all →
+                    </button>
+
+                </div>
+
+                <div class="table-container">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+                                <th>TIME</th>
+                                <th>IDENTITY</th>
+                                <th>LOCATION</th>
+                                <th>DEVICE</th>
+                                <th>STATUS</th>
+                                <th>RISK</th>
+                                <th></th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="recentEventsTable">
+
+                            <tr>
+                                <td colspan="7" class="loading-cell">
+                                    Loading authentication events...
+                                </td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             PAGE: LOGIN EVENTS
+        ================================================== -->
+
+        <section class="page" id="page-events">
+
+            <div class="page-header">
+
+                <div>
+                    <h1>Login Events</h1>
+
+                    <p>
+                        Complete authentication activity captured by LoginShield.
+                    </p>
+                </div>
+
+                <button class="primary-button" onclick="loadEvents()">
+                    ↻ Refresh Events
+                </button>
+
+            </div>
+
+            <div class="filter-bar">
+
+                <input
+                    type="text"
+                    id="eventSearch"
+                    placeholder="Search phone, IP, location..."
+                >
+
+                <select id="riskFilter">
+                    <option value="all">All Risk Levels</option>
+                    <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
+                    <option value="critical">Critical</option>
+                </select>
+
+                <select id="statusFilter">
+                    <option value="all">All Status</option>
+                    <option value="success">Success</option>
+                    <option value="failed">Failed</option>
+                </select>
+
+            </div>
+
+            <div class="panel">
+
+                <div class="table-container">
+
+                    <table>
+
+                        <thead>
+                            <tr>
+                                <th>TIME</th>
+                                <th>PHONE</th>
+                                <th>IP ADDRESS</th>
+                                <th>LOCATION</th>
+                                <th>DEVICE</th>
+                                <th>STATUS</th>
+                                <th>RISK</th>
+                                <th>ACTION</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="eventsTable">
+
+                            <tr>
+                                <td colspan="8" class="loading-cell">
+                                    Loading...
+                                </td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             PAGE: ALERT CENTER
+        ================================================== -->
+
+        <section class="page" id="page-alerts">
+
+            <div class="page-header">
+
+                <div>
+                    <h1>Alert Center</h1>
+
+                    <p>
+                        Suspicious authentication activity requiring investigation.
+                    </p>
+                </div>
+
+                <div class="alert-summary">
+                    <span id="alertCountLarge">0</span>
+                    active alerts
+                </div>
+
+            </div>
+
+            <div id="alertsContainer" class="alerts-container">
+
+                <div class="empty-state">
+                    Loading security alerts...
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             PAGE: LOCATIONS
+        ================================================== -->
+
+        <section class="page" id="page-locations">
+
+            <div class="page-header">
+
+                <div>
+                    <h1>Location Intelligence</h1>
+
+                    <p>
+                        Geographic distribution of authentication activity.
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="location-layout">
+
+                <div class="panel map-panel">
+
+                    <div class="panel-header">
+
+                        <div>
+                            <h2>Authentication Map</h2>
+                            <p>Approximate login locations</p>
+                        </div>
+
+                        <span class="map-note">
+                            IP-based geolocation
+                        </span>
+
+                    </div>
+
+                    <div id="securityMap" class="security-map">
+
+                        <div class="map-grid"></div>
+
+                        <div class="map-center-text">
+                            <span>◎</span>
+                            <strong>LOCATION INTELLIGENCE</strong>
+                            <small>Loading event locations...</small>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="panel">
+
+                    <div class="panel-header">
+                        <div>
+                            <h2>Detected Locations</h2>
+                            <p>Authentication activity by geography</p>
+                        </div>
+                    </div>
+
+                    <div id="locationsList" class="locations-list">
+
+                        <div class="empty-state">
+                            Loading locations...
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             PAGE: SECURITY PROFILE
+        ================================================== -->
+
+        <section class="page" id="page-profile">
+
+            <div class="page-header">
+
+                <div>
+                    <h1>Security Profile</h1>
+
+                    <p>
+                        Behavioral baseline used to identify unusual authentication.
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="profile-grid">
+
+                <div class="panel profile-identity">
+
+                    <div class="profile-avatar">
+                        A
+                    </div>
+
+                    <h2>Protected User</h2>
+
+                    <p id="profilePhone">
+                        No authenticated user
+                    </p>
+
+                    <span class="protected-badge">
+                        ✓ Protected by LoginShield
+                    </span>
+
+                </div>
+
+
+                <div class="panel">
+
+                    <div class="panel-header">
+                        <div>
+                            <h2>Known Environment</h2>
+                            <p>Signals used for behavioral analysis</p>
+                        </div>
+                    </div>
+
+                    <div class="baseline-grid">
+
+                        <div class="baseline-item">
+                            <span>Known IP Addresses</span>
+                            <strong id="knownIps">—</strong>
+                        </div>
+
+                        <div class="baseline-item">
+                            <span>Known Devices</span>
+                            <strong id="knownDevices">—</strong>
+                        </div>
+
+                        <div class="baseline-item">
+                            <span>Known Locations</span>
+                            <strong id="knownLocations">—</strong>
+                        </div>
+
+                        <div class="baseline-item">
+                            <span>Typical Login Hours</span>
+                            <strong id="loginHours">—</strong>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             PAGE: INVESTIGATION
+        ================================================== -->
+
+        <section class="page" id="page-investigation">
+
+            <div class="page-header">
+
+                <div>
+                    <h1>Investigation Center</h1>
+
+                    <p>
+                        Analyze suspicious authentication events and understand
+                        why LoginShield flagged them.
+                    </p>
+                </div>
+
+            </div>
+
+            <div id="investigationEmpty" class="investigation-empty">
+
+                <div class="investigation-icon">
+                    ⌕
+                </div>
+
+                <h2>Select an event to investigate</h2>
+
+                <p>
+                    Open an alert or login event to view its complete
+                    security analysis.
+                </p>
+
+            </div>
+
+            <div id="investigationContent" class="investigation-content hidden">
+
+                <div class="investigation-header panel">
+
+                    <div>
+                        <span class="eyebrow">
+                            SECURITY INVESTIGATION
+                        </span>
+
+                        <h2 id="investigationTitle">
+                            Authentication Event
+                        </h2>
+
+                        <p id="investigationTimestamp"></p>
+                    </div>
+
+                    <div id="investigationRisk"></div>
+
+                </div>
+
+
+                <div class="investigation-grid">
+
+                    <div class="panel">
+
+                        <div class="panel-header">
+                            <div>
+                                <h2>Threat Analysis</h2>
+                                <p>Signals detected for this event</p>
+                            </div>
+                        </div>
+
+                        <div id="investigationReasons"
+                             class="reason-list">
+                        </div>
+
+                    </div>
+
+
+                    <div class="panel">
+
+                        <div class="panel-header">
+                            <div>
+                                <h2>Event Intelligence</h2>
+                                <p>Captured authentication metadata</p>
+                            </div>
+                        </div>
+
+                        <div id="investigationMetadata"
+                             class="metadata-list">
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             PAGE: SIMULATION LAB
+        ================================================== -->
+
+        <section class="page" id="page-simulation">
+
+            <div class="page-header">
+
+                <div>
+                    <h1>Threat Simulation Lab</h1>
+
+                    <p>
+                        Safely simulate authentication scenarios to demonstrate
+                        LoginShield's detection capabilities.
+                    </p>
+                </div>
+
+                <div class="simulation-warning">
+                    DEMO ENVIRONMENT
+                </div>
+
+            </div>
+
+
+            <div class="simulation-grid">
+
+                <div class="simulation-card normal">
+
+                    <div class="simulation-icon">
+                        ✓
+                    </div>
+
+                    <span class="simulation-type">
+                        NORMAL ACTIVITY
+                    </span>
+
+                    <h2>Normal Login</h2>
+
+                    <p>
+                        Simulate a normal authentication event from a trusted
+                        environment.
+                    </p>
+
+                    <button
+                        class="simulation-button"
+                        onclick="runSimulation('normal')"
+                    >
+                        Simulate Normal Login
+                    </button>
+
+                </div>
+
+
+                <div class="simulation-card warning">
+
+                    <div class="simulation-icon">
+                        !
+                    </div>
+
+                    <span class="simulation-type">
+                        HIGH RISK
+                    </span>
+
+                    <h2>Brute Force Attack</h2>
+
+                    <p>
+                        Simulate repeated failed authentication attempts from
+                        a suspicious source.
+                    </p>
+
+                    <button
+                        class="simulation-button"
+                        onclick="runSimulation('brute-force')"
+                    >
+                        Simulate Attack
+                    </button>
+
+                </div>
+
+
+                <div class="simulation-card critical">
+
+                    <div class="simulation-icon">
+                        ⚠
+                    </div>
+
+                    <span class="simulation-type">
+                        CRITICAL
+                    </span>
+
+                    <h2>Suspicious Success</h2>
+
+                    <p>
+                        Simulate a successful login following suspicious
+                        authentication activity.
+                    </p>
+
+                    <button
+                        class="simulation-button"
+                        onclick="runSimulation('suspicious-success')"
+                    >
+                        Simulate Threat
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="panel simulation-console">
+
+                <div class="panel-header">
+
+                    <div>
+                        <h2>Simulation Console</h2>
+                        <p>Detection engine activity</p>
+                    </div>
+
+                    <span class="console-status">
+                        ● READY
+                    </span>
+
+                </div>
+
+                <div id="simulationConsole"
+                     class="console-output">
+
+                    <div>
+                        <span class="console-time">[SYSTEM]</span>
+                        LoginShield simulation environment initialized.
+                    </div>
+
+                    <div>
+                        <span class="console-time">[ENGINE]</span>
+                        Threat detection engine ready.
+                    </div>
+
+                    <div>
+                        <span class="console-time">[ENGINE]</span>
+                        Waiting for simulation...
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- =========================================================
+     TOAST NOTIFICATIONS
+========================================================= -->
+
+<div id="toastContainer" class="toast-container"></div>
+
+
+<!-- =========================================================
+     INVESTIGATION MODAL
+========================================================= -->
+
+<div id="eventModal" class="modal hidden">
+
+    <div class="modal-overlay" onclick="closeEventModal()"></div>
+
+    <div class="modal-content">
+
+        <button
+            class="modal-close"
+            onclick="closeEventModal()"
+        >
+            ×
+        </button>
+
+        <div id="modalBody"></div>
+
+    </div>
+
+</div>
+
+
+<script src="/js/app.js"></script>
+
+</body>
+</html>
